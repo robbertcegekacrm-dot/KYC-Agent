@@ -3,268 +3,479 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KYC Intake Assistant 1.1</title>
+  <title>Agent Factory at Cegeka — Partner Onboarding</title>
 
   <!-- Bot Framework WebChat -->
   <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --brand: #1a3d5c;
-      --brand-light: #2a6496;
-      --accent: #0ea5e9;
+      --brand: #0d9488;
+      --brand-dark: #0f766e;
+      --brand-light: #14b8a6;
+      --brand-subtle: #f0fdfa;
+      --accent: #06b6d4;
       --surface: #f8fafb;
-      --surface-alt: #eef3f6;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --border: #d4dee7;
-      --radius: 14px;
-      --shadow: 0 8px 40px rgba(26, 61, 92, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+      --surface-card: #ffffff;
+      --text: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --border-light: #f1f5f9;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-lg: 0 8px 40px rgba(15,118,110,0.10), 0 2px 8px rgba(0,0,0,0.04);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      height: 100%;
-      font-family: 'DM Sans', system-ui, sans-serif;
-      background: var(--surface);
-      color: var(--text);
-    }
+    html { scroll-behavior: smooth; }
 
     body {
-      display: flex;
-      flex-direction: column;
-      background:
-        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(10,120,180,0.06) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(14,165,233,0.05) 0%, transparent 60%),
-        var(--surface);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ─── Top bar ─── */
-    .topbar {
+    /* ─── Navigation ─── */
+    .nav {
       display: flex;
       align-items: center;
-      gap: 14px;
-      padding: 16px 28px;
+      padding: 0 40px;
+      height: 64px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-logo-icon {
+      width: 30px; height: 30px;
       background: var(--brand);
-      color: #fff;
-      flex-shrink: 0;
-    }
-
-    .topbar-icon {
-      width: 40px; height: 40px;
-      background: rgba(255,255,255,0.12);
-      border-radius: 10px;
+      border-radius: 8px;
       display: grid; place-items: center;
-      flex-shrink: 0;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
     }
 
-    .topbar-icon svg { width: 22px; height: 22px; }
-
-    .topbar-title {
-      font-size: 17px;
-      font-weight: 600;
-      letter-spacing: -0.01em;
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-left: 48px;
     }
 
-    .topbar-sub {
-      font-size: 12px;
-      font-weight: 400;
-      opacity: 0.65;
-      margin-top: 1px;
+    .nav-links a {
+      padding: 20px 20px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
     }
 
-    .topbar-status {
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--brand-dark);
+      border-bottom-color: var(--brand);
+    }
+
+    .nav-right {
       margin-left: auto;
       display: flex;
       align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      font-weight: 500;
-      opacity: 0.8;
+      gap: 16px;
     }
 
-    .topbar-status .dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: #34d399;
-      animation: pulse-dot 2s ease-in-out infinite;
+    .nav-right button {
+      background: none; border: none; cursor: pointer;
+      color: var(--text-secondary); padding: 8px; border-radius: 8px;
+      transition: background 0.2s;
     }
 
-    @keyframes pulse-dot {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(52,211,153,0.5); }
-      50% { box-shadow: 0 0 0 5px rgba(52,211,153,0); }
+    .nav-right button:hover { background: var(--border-light); }
+
+    .nav-signin {
+      font-size: 13.5px; font-weight: 600;
+      color: var(--text-secondary); text-decoration: none;
+      padding: 8px 16px; border-radius: 8px; transition: all 0.2s;
     }
 
-    /* ─── Chat container ─── */
-    .chat-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      max-width: 920px;
-      width: 100%;
-      margin: 0 auto;
-      min-height: 0;
-    }
+    .nav-signin:hover { background: var(--border-light); }
 
-    /* ─── WebChat wrapper ─── */
-    #webchat {
-      flex: 1;
-      min-height: 0;
+    /* ─── Hero ─── */
+    .hero {
+      background: linear-gradient(135deg, #0f766e 0%, #0d9488 40%, #2dd4bf 100%);
+      padding: 72px 40px;
+      text-align: center;
+      position: relative;
       overflow: hidden;
     }
 
-    /* ─── Loading state ─── */
-    .loading {
-      flex: 1;
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 10% 90%, rgba(255,255,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 90% 20%, rgba(255,255,255,0.06) 0%, transparent 60%);
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      letter-spacing: -0.02em;
+    }
+
+    /* ─── Intro ─── */
+    .intro {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 56px 40px;
+      text-align: center;
+    }
+
+    .intro p {
+      font-size: 16px; line-height: 1.7;
+      color: var(--text-secondary); margin-bottom: 16px;
+    }
+
+    .intro strong { color: var(--text); font-weight: 700; }
+
+    .intro .tagline {
+      font-size: 14px; color: var(--text-muted);
+      font-style: italic; margin-top: 8px;
+    }
+
+    /* ─── Main two-column ─── */
+    .main {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 40px 80px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ─── How it works panel ─── */
+    .how-panel {
+      background: var(--surface-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 40px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .how-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--brand); margin-bottom: 16px;
+    }
+
+    .how-panel h2 {
+      font-size: 28px; font-weight: 800; line-height: 1.2;
+      letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px;
+    }
+
+    .how-panel .subtitle {
+      font-size: 14px; color: var(--text-secondary);
+      line-height: 1.6; margin-bottom: 36px;
+    }
+
+    .agent-step {
+      display: flex; gap: 16px;
+      padding: 20px 0;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .agent-step:last-child { border-bottom: 1px solid var(--border-light); }
+
+    .step-number {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: grid; place-items: center;
+      font-size: 13px; font-weight: 700;
+      flex-shrink: 0; margin-top: 2px;
+    }
+
+    .step-number.complete { background: var(--brand); color: #fff; }
+
+    .step-number.active {
+      background: var(--brand-light); color: #fff;
+      animation: pulse-step 2s ease-in-out infinite;
+    }
+
+    .step-number.waiting {
+      background: var(--border-light); color: var(--text-muted);
+      border: 1.5px solid var(--border);
+    }
+
+    @keyframes pulse-step {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(20,184,166,0.3); }
+      50% { box-shadow: 0 0 0 6px rgba(20,184,166,0); }
+    }
+
+    .step-content h3 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+    .step-content p { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+
+    .step-badge {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 2px 10px; border-radius: 20px; margin-top: 6px;
+    }
+
+    .step-badge.complete { background: #ecfdf5; color: #059669; }
+
+    .step-badge.running {
+      background: #f0fdfa; color: var(--brand);
+      animation: pulse-badge 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-badge {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    .step-badge.waiting { background: var(--border-light); color: var(--text-muted); }
+
+    /* ─── Chat panel ─── */
+    .chat-panel {
+      background: var(--surface-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 18px;
-      color: var(--text-muted);
-      font-size: 14px;
+      height: 640px;
+      overflow: hidden;
+      position: sticky;
+      top: 88px;
+    }
+
+    .chat-header {
+      padding: 20px 24px;
+      background: linear-gradient(135deg, #f0fdfa 0%, #e0f7f5 100%);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .chat-avatar {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brand-light), var(--accent));
+      margin: 0 auto 10px;
+      display: grid; place-items: center;
+      box-shadow: 0 4px 16px rgba(13,148,136,0.2);
+    }
+
+    .chat-avatar svg { width: 36px; height: 36px; color: #fff; }
+
+    .chat-header-name { font-size: 16px; font-weight: 700; color: var(--text); }
+    .chat-header-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    #webchat { flex: 1; min-height: 0; overflow: hidden; }
+    #webchat > * { height: 100%; }
+
+    .loading {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; color: var(--text-muted); font-size: 13px;
     }
 
     .loading.hidden { display: none; }
 
     .spinner {
-      width: 36px; height: 36px;
+      width: 32px; height: 32px;
       border: 3px solid var(--border);
-      border-top-color: var(--accent);
+      border-top-color: var(--brand);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ─── Error state ─── */
     .error-banner {
-      display: none;
-      margin: 20px;
-      padding: 16px 20px;
-      background: #fef2f2;
-      border: 1px solid #fca5a5;
-      border-radius: 10px;
-      color: #991b1b;
-      font-size: 13px;
-      line-height: 1.5;
+      display: none; margin: 16px; padding: 14px 18px;
+      background: #fef2f2; border: 1px solid #fca5a5;
+      border-radius: var(--radius-sm); color: #991b1b;
+      font-size: 13px; line-height: 1.5;
     }
 
     .error-banner.show { display: block; }
 
     .error-banner code {
-      display: block;
-      margin-top: 8px;
-      padding: 8px 10px;
-      background: rgba(0,0,0,0.04);
-      border-radius: 6px;
-      font-family: 'Space Mono', monospace;
-      font-size: 11.5px;
-      word-break: break-all;
-      color: #7f1d1d;
+      display: block; margin-top: 8px; padding: 8px 10px;
+      background: rgba(0,0,0,0.04); border-radius: 6px;
+      font-family: 'Space Mono', monospace; font-size: 11px;
+      word-break: break-all; color: #7f1d1d;
     }
 
-    /* ─── Footer ─── */
-    .footer {
-      padding: 8px 20px;
-      text-align: center;
-      font-size: 11px;
-      color: var(--text-muted);
-      border-top: 1px solid var(--border);
-      background: #fff;
-      flex-shrink: 0;
+    .chat-footer {
+      padding: 8px 16px; text-align: center;
+      font-size: 10.5px; color: var(--text-muted);
+      border-top: 1px solid var(--border-light); background: #fafbfc;
     }
 
-    /* ─── WebChat style overrides ─── */
-    #webchat > * { height: 100%; }
-
-    @media (min-width: 921px) {
-      .chat-container {
-        margin-top: 20px;
-        margin-bottom: 20px;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        border: 1px solid var(--border);
-        overflow: hidden;
-        background: #fff;
-      }
+    .page-footer {
+      padding: 32px 40px; text-align: center;
+      font-size: 12px; color: var(--text-muted);
+      border-top: 1px solid var(--border); background: #fff;
     }
 
-    @media (max-width: 920px) {
-      .chat-container {
-        max-width: 100%;
-        border-radius: 0;
-      }
-      .topbar { padding: 14px 18px; }
+    .page-footer a { color: var(--brand); text-decoration: none; font-weight: 600; }
+
+    @media (max-width: 900px) {
+      .nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 48px 20px; }
+      .intro { padding: 40px 20px; }
+      .main { grid-template-columns: 1fr; padding: 0 20px 60px; }
+      .chat-panel { position: static; height: 560px; }
     }
   </style>
 </head>
 <body>
 
-  <div class="chat-container">
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-icon">af</span>
+      Agent Factory at Cegeka
+    </a>
+    <div class="nav-links">
+      <a href="#" class="active">Our Partners</a>
+      <a href="#">My Application</a>
+    </div>
+    <div class="nav-right">
+      <button aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <a href="#" class="nav-signin">Sign in</a>
+    </div>
+  </nav>
 
-    <!-- Header -->
-    <div class="topbar">
-      <div class="topbar-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-        </svg>
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Shaping partnerships by weaving intelligence, trust and process into one.</h1>
+  </section>
+
+  <!-- Intro -->
+  <section class="intro">
+    <p>Most partnership processes fail not because the candidates are wrong — but because no one had the time to look closely enough, verify consistently, or decide with confidence.</p>
+    <p>We built <strong>Agent Factory</strong> to fix that. Four AI agents handle the research, verification and scoring so your partner team can focus on relationships — not paperwork.</p>
+    <p class="tagline">We question the application before we approve it.</p>
+  </section>
+
+  <!-- Main content -->
+  <section class="main">
+
+    <!-- Left: How it works -->
+    <div class="how-panel">
+      <div class="how-label">How it works</div>
+      <h2>Four agents.<br>One qualified answer.</h2>
+      <p class="subtitle">Each agent hands off to the next, building a complete picture of your organisation before Verdict produces an explainable qualification report.</p>
+
+      <div class="agent-step">
+        <div class="step-number complete">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="step-content">
+          <h3>Scout — Web Research</h3>
+          <p>Company registration, market presence, news and adverse media screening.</p>
+          <span class="step-badge complete">Complete</span>
+        </div>
       </div>
-      <div>
-        <div class="topbar-title">KYC Intake Assistant v18</div>
-        <div class="topbar-sub">Secure partner onboarding</div>
+
+      <div class="agent-step">
+        <div class="step-number active">2</div>
+        <div class="step-content">
+          <h3>Lens — LinkedIn Vision</h3>
+          <p>Computer vision reads the contact's public profile and verifies consistency with the application.</p>
+          <span class="step-badge running">Running…</span>
+        </div>
       </div>
-      <div class="topbar-status">
-        <span class="dot"></span>
-        Online
+
+      <div class="agent-step">
+        <div class="step-number waiting">3</div>
+        <div class="step-content">
+          <h3>Auditor — Document Analysis</h3>
+          <p>Cross-references uploaded credentials against partner criteria and Scout's findings.</p>
+          <span class="step-badge waiting">Waiting</span>
+        </div>
+      </div>
+
+      <div class="agent-step">
+        <div class="step-number waiting">4</div>
+        <div class="step-content">
+          <h3>Verdict — Qualification Score</h3>
+          <p>Scores five dimensions and produces an explainable recommendation: Qualified, Conditional, or Not Qualified.</p>
+          <span class="step-badge waiting">Waiting</span>
+        </div>
       </div>
     </div>
 
-    <!-- Loading -->
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-      Connecting to assistant…
+    <!-- Right: Chat -->
+    <div class="chat-panel">
+      <div class="chat-header">
+        <div class="chat-avatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+          </svg>
+        </div>
+        <div class="chat-header-name">Alex</div>
+        <div class="chat-header-role">Partner Onboarding · Agent Factory</div>
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        Connecting to Alex…
+      </div>
+
+      <div class="error-banner" id="error"></div>
+
+      <div id="webchat" style="display:none;"></div>
+
+      <div class="chat-footer">
+        Powered by Copilot Studio · Conversations may be recorded for quality purposes
+      </div>
     </div>
 
-    <!-- Error -->
-    <div class="error-banner" id="error"></div>
+  </section>
 
-    <!-- WebChat mounts here -->
-    <div id="webchat" style="display:none;"></div>
-
-    <!-- Footer -->
-    <div class="footer">
-      Powered by Copilot Studio &middot; Conversations may be recorded for quality purposes
-    </div>
-
-  </div>
+  <footer class="page-footer">
+    &copy; 2025 <a href="#">Cegeka</a> · Agent Factory · All rights reserved
+  </footer>
 
   <script>
     (function () {
       'use strict';
 
-      // ╔══════════════════════════════════════════════════════════════╗
-      // ║  CONFIGURATION                                             ║
-      // ║                                                            ║
-      // ║  Paste your token endpoint from Copilot Studio:            ║
-      // ║    → Channels → Mobile app → Token Endpoint                ║
-      // ║                                                            ║
-      // ║  IMPORTANT: In Copilot Studio, go to:                      ║
-      // ║    → Settings → Security → Web channel security            ║
-      // ║    → Turn OFF "Require secured access"                     ║
-      // ║    (for demo/PoC use; use a backend proxy in production)   ║
-      // ╚══════════════════════════════════════════════════════════════╝
-
       const TOKEN_ENDPOINT = 'https://5793d4d0276ee460804250c4354e18.1c.environment.api.powerplatform.com/powervirtualagents/botsbyschema/cgk_KYCWebsiteIntakeAgent/directline/token?api-version=2022-03-01-preview';
 
-      // ──────────────────────────────────────────────────────────────
-
-      const $  = id => document.getElementById(id);
+      const $ = id => document.getElementById(id);
       const loadingEl = $('loading');
       const errorEl   = $('error');
       const chatEl    = $('webchat');
@@ -275,16 +486,12 @@
         errorEl.innerHTML = message + (detail ? `<code>${detail}</code>` : '');
       }
 
-      // ─── Derive environment base + regional settings URL ───
       const csPathIndex = TOKEN_ENDPOINT.indexOf('/copilotstudio/');
       const pvaPathIndex = TOKEN_ENDPOINT.indexOf('/powervirtualagents/');
       const pathIndex = csPathIndex !== -1 ? csPathIndex : pvaPathIndex;
 
       if (pathIndex === -1) {
-        showError(
-          '<strong>Invalid token endpoint.</strong><br>' +
-          'The URL must contain <code>/copilotstudio/</code> or <code>/powervirtualagents/</code>.'
-        );
+        showError('<strong>Invalid token endpoint.</strong>');
         return;
       }
 
@@ -293,12 +500,10 @@
         TOKEN_ENDPOINT.indexOf('api-version')
       ).split('=')[1];
 
-      // Use the correct namespace for regional channel settings
       const namespace = csPathIndex !== -1 ? 'copilotstudio' : 'powervirtualagents';
       const regionalChannelSettingsURL =
         `${environmentEndpoint}/${namespace}/regionalchannelsettings?api-version=${apiVersion}`;
 
-      // ─── Create WebChat store to auto-start conversation ───
       function createStore() {
         return window.WebChat.createStore(
           {},
@@ -321,32 +526,24 @@
         );
       }
 
-      // ─── Initialise WebChat ───
       async function init() {
         try {
-          // Step 1: Get regional channel settings (Direct Line domain)
           let directLineURL = 'https://directline.botframework.com/v3/directline';
           try {
             const regionalRes = await fetch(regionalChannelSettingsURL);
             if (regionalRes.ok) {
               const regional = await regionalRes.json();
-              console.log('[Chat] Regional settings:', JSON.stringify(regional));
               if (regional.channelUrlsById?.directline) {
                 directLineURL = regional.channelUrlsById.directline;
-                // Ensure the URL includes the /v3/directline path
                 if (!directLineURL.includes('/v3/directline')) {
                   directLineURL = directLineURL.replace(/\/$/, '') + '/v3/directline';
                 }
               }
-            } else {
-              console.warn('[Chat] Regional settings response:', regionalRes.status);
             }
           } catch (e) {
-            console.warn('[Chat] Could not fetch regional settings, using default Direct Line URL:', e);
+            console.warn('[Chat] Could not fetch regional settings:', e);
           }
-          console.log('[Chat] Using Direct Line URL:', directLineURL);
 
-          // Step 2: Get Direct Line token
           const tokenRes = await fetch(TOKEN_ENDPOINT);
           if (!tokenRes.ok) {
             const errorText = await tokenRes.text().catch(() => '');
@@ -356,59 +553,54 @@
             );
           }
           const tokenData = await tokenRes.json();
-          console.log('[Chat] Token response keys:', Object.keys(tokenData));
-          console.log('[Chat] Token preview:', tokenData.token ? tokenData.token.slice(0, 30) + '...' : 'NO TOKEN FIELD');
 
-          // Step 3: Create Direct Line connection
           const directLine = window.WebChat.createDirectLine({
             token: tokenData.token,
             domain: directLineURL,
           });
 
-          // Step 4: Style options
           const styleOptions = {
             rootHeight: '100%',
             rootWidth: '100%',
             backgroundColor: '#ffffff',
 
-            bubbleBackground: '#f0f4f8',
+            bubbleBackground: '#f0fdfa',
             bubbleBorderColor: 'transparent',
-            bubbleBorderRadius: 12,
-            bubbleTextColor: '#1e293b',
-            bubbleFromUserBackground: '#1a3d5c',
+            bubbleBorderRadius: 14,
+            bubbleTextColor: '#0f172a',
+            bubbleFromUserBackground: '#0d9488',
             bubbleFromUserBorderColor: 'transparent',
-            bubbleFromUserBorderRadius: 12,
+            bubbleFromUserBorderRadius: 14,
             bubbleFromUserTextColor: '#ffffff',
 
-            botAvatarInitials: '🛡️',
+            botAvatarInitials: 'A',
             userAvatarInitials: '👤',
-            avatarBorderRadius: '10px',
-            avatarSize: 34,
-            botAvatarBackgroundColor: '#e0ecf5',
-            userAvatarBackgroundColor: '#1a3d5c',
+            avatarBorderRadius: '50%',
+            avatarSize: 32,
+            botAvatarBackgroundColor: '#0d9488',
+            userAvatarBackgroundColor: '#475569',
 
             sendBoxBackground: '#f8fafb',
-            sendBoxBorderTop: '1px solid #d4dee7',
-            sendBoxTextColor: '#1e293b',
+            sendBoxBorderTop: '1px solid #e2e8f0',
+            sendBoxTextColor: '#0f172a',
             sendBoxPlaceholderColor: '#94a3b8',
-            sendBoxButtonColor: '#1a3d5c',
-            sendBoxButtonColorOnHover: '#0ea5e9',
-            sendBoxButtonColorOnFocus: '#0ea5e9',
+            sendBoxButtonColor: '#0d9488',
+            sendBoxButtonColorOnHover: '#0f766e',
+            sendBoxButtonColorOnFocus: '#0f766e',
 
-            suggestedActionBackground: '#ffffff',
-            suggestedActionBorderColor: '#d4dee7',
-            suggestedActionBorderRadius: 8,
-            suggestedActionTextColor: '#1a3d5c',
+            suggestedActionBackgroundColor: '#ffffff',
+            suggestedActionBorderColor: '#e2e8f0',
+            suggestedActionBorderRadius: 10,
+            suggestedActionTextColor: '#0d9488',
 
-            primaryFont: "'DM Sans', system-ui, sans-serif",
+            primaryFont: "'Plus Jakarta Sans', system-ui, sans-serif",
             fontSizeSmall: '13px',
-            subtle: '#64748b',
+            subtle: '#94a3b8',
 
-            hideUploadButton: true,
+            hideUploadButton: false,
             autoScrollSnapOnPage: true,
           };
 
-          // Step 5: Render
           loadingEl.classList.add('hidden');
           chatEl.style.display = 'flex';
 
@@ -427,10 +619,7 @@
 
           const isCors = err.message === 'Failed to fetch';
           const hint = isCors
-            ? '<br><br><strong>This is likely a CORS error.</strong> Check that:<br>' +
-              '• "Require secured access" is turned <strong>OFF</strong> in Copilot Studio → Settings → Security → Web channel security<br>' +
-              '• The agent is <strong>published</strong><br>' +
-              '• You are serving this file from a web server (not opening it as a local file)'
+            ? '<br><br><strong>Likely a CORS error.</strong> Check that "Require secured access" is OFF in Copilot Studio and the agent is published.'
             : '';
 
           showError(
@@ -441,7 +630,6 @@
       }
 
       init();
-
     })();
   </script>
 
