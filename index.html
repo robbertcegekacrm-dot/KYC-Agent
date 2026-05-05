@@ -216,7 +216,7 @@
         </svg>
       </div>
       <div>
-        <div class="topbar-title">KYC Intake Assistant v17</div>
+        <div class="topbar-title">KYC Intake Assistant v18</div>
         <div class="topbar-sub">Secure partner onboarding</div>
       </div>
       <div class="topbar-status">
@@ -330,13 +330,21 @@
             const regionalRes = await fetch(regionalChannelSettingsURL);
             if (regionalRes.ok) {
               const regional = await regionalRes.json();
+              console.log('[Chat] Regional settings:', JSON.stringify(regional));
               if (regional.channelUrlsById?.directline) {
                 directLineURL = regional.channelUrlsById.directline;
+                // Ensure the URL includes the /v3/directline path
+                if (!directLineURL.includes('/v3/directline')) {
+                  directLineURL = directLineURL.replace(/\/$/, '') + '/v3/directline';
+                }
               }
+            } else {
+              console.warn('[Chat] Regional settings response:', regionalRes.status);
             }
           } catch (e) {
             console.warn('[Chat] Could not fetch regional settings, using default Direct Line URL:', e);
           }
+          console.log('[Chat] Using Direct Line URL:', directLineURL);
 
           // Step 2: Get Direct Line token
           const tokenRes = await fetch(TOKEN_ENDPOINT);
@@ -348,6 +356,8 @@
             );
           }
           const tokenData = await tokenRes.json();
+          console.log('[Chat] Token response keys:', Object.keys(tokenData));
+          console.log('[Chat] Token preview:', tokenData.token ? tokenData.token.slice(0, 30) + '...' : 'NO TOKEN FIELD');
 
           // Step 3: Create Direct Line connection
           const directLine = window.WebChat.createDirectLine({
