@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KYC Intake Assistant</title>
+
+  <!-- Bot Framework WebChat -->
+  <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --brand: #1a3d5c;
+      --brand-light: #2a6496;
+      --accent: #0ea5e9;
+      --surface: #f8fafb;
+      --surface-alt: #eef3f6;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #d4dee7;
+      --radius: 14px;
+      --shadow: 0 8px 40px rgba(26, 61, 92, 0.12), 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 0%, rgba(10,120,180,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(14,165,233,0.05) 0%, transparent 60%),
+        var(--surface);
+    }
+
+    /* ─── Top bar ─── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 28px;
+      background: var(--brand);
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .topbar-icon {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 10px;
+      display: grid; place-items: center;
+      flex-shrink: 0;
+    }
+
+    .topbar-icon svg { width: 22px; height: 22px; }
+
+    .topbar-title {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar-sub {
+      font-size: 12px;
+      font-weight: 400;
+      opacity: 0.65;
+      margin-top: 1px;
+    }
+
+    .topbar-status {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 500;
+      opacity: 0.8;
+    }
+
+    .topbar-status .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #34d399;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(52,211,153,0.5); }
+      50% { box-shadow: 0 0 0 5px rgba(52,211,153,0); }
+    }
+
+    /* ─── Chat container ─── */
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 920px;
+      width: 100%;
+      margin: 0 auto;
+      min-height: 0;
+    }
+
+    /* ─── WebChat wrapper ─── */
+    #webchat {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* ─── Loading state ─── */
+    .loading {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .loading.hidden { display: none; }
+
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Error state ─── */
+    .error-banner {
+      display: none;
+      margin: 20px;
+      padding: 16px 20px;
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      border-radius: 10px;
+      color: #991b1b;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .error-banner.show { display: block; }
+
+    .error-banner code {
+      display: block;
+      margin-top: 8px;
+      padding: 8px 10px;
+      background: rgba(0,0,0,0.04);
+      border-radius: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11.5px;
+      word-break: break-all;
+      color: #7f1d1d;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      padding: 8px 20px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    /* ─── WebChat style overrides ─── */
+    #webchat > * { height: 100%; }
+
+    @media (min-width: 921px) {
+      .chat-container {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid var(--border);
+        overflow: hidden;
+        background: #fff;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .chat-container {
+        max-width: 100%;
+        border-radius: 0;
+      }
+      .topbar { padding: 14px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chat-container">
+
+    <!-- Header -->
+    <div class="topbar">
+      <div class="topbar-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="topbar-title">KYC Intake Assistant</div>
+        <div class="topbar-sub">Secure partner onboarding</div>
+      </div>
+      <div class="topbar-status">
+        <span class="dot"></span>
+        Online
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      Connecting to assistant…
+    </div>
+
+    <!-- Error -->
+    <div class="error-banner" id="error"></div>
+
+    <!-- WebChat mounts here -->
+    <div id="webchat" style="display:none;"></div>
+
+    <!-- Footer -->
+    <div class="footer">
+      Powered by Copilot Studio &middot; Conversations may be recorded for quality purposes
+    </div>
+
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // ╔══════════════════════════════════════════════════════════════╗
+      // ║  CONFIGURATION                                             ║
+      // ║                                                            ║
+      // ║  Paste your token endpoint from Copilot Studio:            ║
+      // ║    → Channels → Mobile app → Token Endpoint                ║
+      // ║                                                            ║
+      // ║  IMPORTANT: In Copilot Studio, go to:                      ║
+      // ║    → Settings → Security → Web channel security            ║
+      // ║    → Turn OFF "Require secured access"                     ║
+      // ║    (for demo/PoC use; use a backend proxy in production)   ║
+      // ╚══════════════════════════════════════════════════════════════╝
+
+      const TOKEN_ENDPOINT = 'https://5793d4d0276ee460804250c4354e18.1c.environment.api.powerplatform.com/copilotstudio/dataverse-backed/authenticated/bots/cgk_KYCWebsiteIntakeAgent/conversations?api-version=2022-03-01-preview';
+
+      // ──────────────────────────────────────────────────────────────
+
+      const $  = id => document.getElementById(id);
+      const loadingEl = $('loading');
+      const errorEl   = $('error');
+      const chatEl    = $('webchat');
+
+      function showError(message, detail) {
+        loadingEl.classList.add('hidden');
+        errorEl.classList.add('show');
+        errorEl.innerHTML = message + (detail ? `<code>${detail}</code>` : '');
+      }
+
+      // ─── Derive environment base + regional settings URL ───
+      const csPathIndex = TOKEN_ENDPOINT.indexOf('/copilotstudio/');
+      const pvaPathIndex = TOKEN_ENDPOINT.indexOf('/powervirtualagents/');
+      const pathIndex = csPathIndex !== -1 ? csPathIndex : pvaPathIndex;
+
+      if (pathIndex === -1) {
+        showError(
+          '<strong>Invalid token endpoint.</strong><br>' +
+          'The URL must contain <code>/copilotstudio/</code> or <code>/powervirtualagents/</code>.'
+        );
+        return;
+      }
+
+      const environmentEndpoint = TOKEN_ENDPOINT.slice(0, pathIndex);
+      const apiVersion = TOKEN_ENDPOINT.slice(
+        TOKEN_ENDPOINT.indexOf('api-version')
+      ).split('=')[1];
+
+      // Use the correct namespace for regional channel settings
+      const namespace = csPathIndex !== -1 ? 'copilotstudio' : 'powervirtualagents';
+      const regionalChannelSettingsURL =
+        `${environmentEndpoint}/${namespace}/regionalchannelsettings?api-version=${apiVersion}`;
+
+      // ─── Create WebChat store to auto-start conversation ───
+      function createStore() {
+        return window.WebChat.createStore(
+          {},
+          ({ dispatch }) => (next) => (action) => {
+            if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
+              dispatch({
+                type: 'DIRECT_LINE/POST_ACTIVITY',
+                meta: { method: 'keyboard' },
+                payload: {
+                  activity: {
+                    channelData: { postBack: true },
+                    name: 'startConversation',
+                    type: 'event',
+                  },
+                },
+              });
+            }
+            return next(action);
+          }
+        );
+      }
+
+      // ─── Initialise WebChat ───
+      async function init() {
+        try {
+          // Step 1: Get regional channel settings (Direct Line domain)
+          let directLineURL = 'https://directline.botframework.com/v3/directline';
+          try {
+            const regionalRes = await fetch(regionalChannelSettingsURL);
+            if (regionalRes.ok) {
+              const regional = await regionalRes.json();
+              if (regional.channelUrlsById?.directline) {
+                directLineURL = regional.channelUrlsById.directline;
+              }
+            }
+          } catch (e) {
+            console.warn('[Chat] Could not fetch regional settings, using default Direct Line URL:', e);
+          }
+
+          // Step 2: Get Direct Line token
+          const tokenRes = await fetch(TOKEN_ENDPOINT);
+          if (!tokenRes.ok) {
+            const errorText = await tokenRes.text().catch(() => '');
+            throw new Error(
+              `Token request failed: ${tokenRes.status} ${tokenRes.statusText}` +
+              (errorText ? ` — ${errorText.slice(0, 200)}` : '')
+            );
+          }
+          const tokenData = await tokenRes.json();
+
+          // Step 3: Create Direct Line connection
+          const directLine = window.WebChat.createDirectLine({
+            token: tokenData.token,
+            domain: directLineURL,
+          });
+
+          // Step 4: Style options
+          const styleOptions = {
+            rootHeight: '100%',
+            rootWidth: '100%',
+            backgroundColor: '#ffffff',
+
+            bubbleBackground: '#f0f4f8',
+            bubbleBorderColor: 'transparent',
+            bubbleBorderRadius: 12,
+            bubbleTextColor: '#1e293b',
+            bubbleFromUserBackground: '#1a3d5c',
+            bubbleFromUserBorderColor: 'transparent',
+            bubbleFromUserBorderRadius: 12,
+            bubbleFromUserTextColor: '#ffffff',
+
+            botAvatarInitials: '🛡️',
+            userAvatarInitials: '👤',
+            avatarBorderRadius: '10px',
+            avatarSize: 34,
+            botAvatarBackgroundColor: '#e0ecf5',
+            userAvatarBackgroundColor: '#1a3d5c',
+
+            sendBoxBackground: '#f8fafb',
+            sendBoxBorderTop: '1px solid #d4dee7',
+            sendBoxTextColor: '#1e293b',
+            sendBoxPlaceholderColor: '#94a3b8',
+            sendBoxButtonColor: '#1a3d5c',
+            sendBoxButtonColorOnHover: '#0ea5e9',
+            sendBoxButtonColorOnFocus: '#0ea5e9',
+
+            suggestedActionBackground: '#ffffff',
+            suggestedActionBorderColor: '#d4dee7',
+            suggestedActionBorderRadius: 8,
+            suggestedActionTextColor: '#1a3d5c',
+
+            primaryFont: "'DM Sans', system-ui, sans-serif",
+            fontSizeSmall: '13px',
+            subtle: '#64748b',
+
+            hideUploadButton: true,
+            autoScrollSnapOnPage: true,
+          };
+
+          // Step 5: Render
+          loadingEl.classList.add('hidden');
+          chatEl.style.display = 'flex';
+
+          window.WebChat.renderWebChat(
+            {
+              directLine,
+              store: createStore(),
+              styleOptions,
+              locale: 'en-US',
+            },
+            chatEl
+          );
+
+        } catch (err) {
+          console.error('[Chat] Initialisation failed:', err);
+
+          const isCors = err.message === 'Failed to fetch';
+          const hint = isCors
+            ? '<br><br><strong>This is likely a CORS error.</strong> Check that:<br>' +
+              '• "Require secured access" is turned <strong>OFF</strong> in Copilot Studio → Settings → Security → Web channel security<br>' +
+              '• The agent is <strong>published</strong><br>' +
+              '• You are serving this file from a web server (not opening it as a local file)'
+            : '';
+
+          showError(
+            '<strong>Could not connect to the assistant.</strong>' + hint,
+            err.message
+          );
+        }
+      }
+
+      init();
+
+    })();
+  </script>
+
+</body>
+</html>
