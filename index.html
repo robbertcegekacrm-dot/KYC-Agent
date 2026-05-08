@@ -15,15 +15,12 @@
 
   <style>
     :root {
-      /* Cegeka brand palette */
       --brand: #0098C3;
       --brand-dark: #007A9E;
       --brand-darker: #005F7A;
       --brand-light: #00B4E6;
       --brand-subtle: #E8F6FB;
       --brand-glow: rgba(0, 152, 195, 0.12);
-
-      /* Neutrals */
       --surface: #F7F9FB;
       --card: #FFFFFF;
       --text: #0D1B2A;
@@ -31,16 +28,12 @@
       --text-muted: #8DA0B3;
       --border: #DDE4EB;
       --border-light: #EEF2F6;
-
-      /* Layout */
       --radius: 16px;
       --radius-sm: 10px;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
       --shadow-lg: 0 8px 40px rgba(0,152,195,0.10), 0 2px 8px rgba(0,0,0,0.03);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       background: var(--surface);
@@ -60,19 +53,13 @@
       display: flex; align-items: center; gap: 12px;
       text-decoration: none;
     }
-    .nav-logo img {
-      height: 28px; width: auto;
-    }
+    .nav-logo img { height: 28px; width: auto; }
     .nav-logo-fallback {
       font-weight: 800; font-size: 18px; color: var(--brand);
       letter-spacing: -0.3px;
     }
-    .nav-divider {
-      width: 1px; height: 24px; background: var(--border); margin: 0 16px;
-    }
-    .nav-title {
-      font-size: 14px; font-weight: 600; color: var(--text-sec);
-    }
+    .nav-divider { width: 1px; height: 24px; background: var(--border); margin: 0 16px; }
+    .nav-title { font-size: 14px; font-weight: 600; color: var(--text-sec); }
     .nav-badge {
       margin-left: auto;
       font-size: 10.5px; font-weight: 700; text-transform: uppercase;
@@ -81,43 +68,32 @@
       padding: 5px 14px; border-radius: 20px;
     }
 
-    /* ─── Main layout ─── */
+    /* ─── Main ─── */
     .main {
-      max-width: 1120px;
-      margin: 0 auto;
+      max-width: 1120px; margin: 0 auto;
       padding: 36px 36px 60px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-      align-items: start;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 28px; align-items: start;
     }
 
-    /* ─── Left panel ─── */
-    .info-panel {
-      display: flex; flex-direction: column; gap: 24px;
-    }
-
+    /* ─── Left ─── */
+    .info-panel { display: flex; flex-direction: column; gap: 24px; }
     .welcome h1 {
       font-size: 26px; font-weight: 800; line-height: 1.25;
       letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px;
     }
     .welcome h1 span { color: var(--brand); }
-    .welcome p {
-      font-size: 14.5px; color: var(--text-sec); line-height: 1.65;
-    }
+    .welcome p { font-size: 14.5px; color: var(--text-sec); line-height: 1.65; }
 
-    /* Video */
     .video-card {
       background: var(--card); border-radius: var(--radius);
       border: 1px solid var(--border); overflow: hidden;
       box-shadow: var(--shadow-sm);
     }
     .video-card iframe {
-      width: 100%; aspect-ratio: 16/9;
-      border: none; display: block;
+      width: 100%; aspect-ratio: 16/9; border: none; display: block;
     }
 
-    /* How it works */
     .steps-card {
       background: var(--card); border-radius: var(--radius);
       border: 1px solid var(--border); padding: 24px 28px;
@@ -141,7 +117,6 @@
     .step-row h3 { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
     .step-row p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
-    /* Quick start buttons */
     .qs-section { display: flex; flex-direction: column; gap: 10px; }
     .qs-label {
       font-size: 11px; font-weight: 700; text-transform: uppercase;
@@ -171,16 +146,13 @@
 
     .powered {
       font-size: 11px; color: var(--text-muted);
-      display: flex; align-items: center; gap: 6px;
-      padding-top: 8px;
+      display: flex; align-items: center; gap: 6px; padding-top: 8px;
     }
 
-    /* ─── Chat panel ─── */
+    /* ─── Chat ─── */
     .chat-panel {
-      background: var(--card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg);
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid var(--border); box-shadow: var(--shadow-lg);
       display: flex; flex-direction: column;
       height: 680px; overflow: hidden;
       position: sticky; top: 80px;
@@ -239,7 +211,6 @@
       border-top: 1px solid var(--border-light); background: #FAFBFC;
     }
 
-    /* ─── Footer ─── */
     .page-footer {
       padding: 28px 36px; text-align: center;
       font-size: 12px; color: var(--text-muted);
@@ -256,7 +227,6 @@
 </head>
 <body>
 
-  <!-- Nav -->
   <nav class="nav">
     <a href="https://www.cegeka.com" class="nav-logo" target="_blank" rel="noopener">
       <img src="https://www.cegeka.com/hubfs/Cegeka_Logo.svg" alt="Cegeka" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
@@ -267,10 +237,8 @@
     <div class="nav-badge">KYC Demo</div>
   </nav>
 
-  <!-- Main -->
   <section class="main">
 
-    <!-- Left: Info -->
     <div class="info-panel">
 
       <div class="welcome">
@@ -278,7 +246,6 @@
         <p>Our AI-powered Know Your Customer agent guides you through the due diligence intake process &mdash; fast, compliant, and always available.</p>
       </div>
 
-      <!-- Video — replace VIDEO_ID with your YouTube video ID -->
       <div class="video-card">
         <iframe
           src="https://www.youtube.com/embed/VIDEO_ID"
@@ -287,43 +254,41 @@
           allowfullscreen></iframe>
       </div>
 
-      <!-- How it works -->
       <div class="steps-card">
         <div class="steps-label">How it works</div>
         <div class="step-row">
           <div class="step-num">1</div>
           <div>
             <h3>Start a conversation</h3>
-            <p>Use a quick-start button or type your own message to begin the intake.</p>
+            <p>Say hello or use a quick-start button to begin the intake process.</p>
           </div>
         </div>
         <div class="step-row">
           <div class="step-num">2</div>
           <div>
-            <h3>Provide company details</h3>
-            <p>The agent collects company information and verifies identity step by step.</p>
+            <h3>Provide KvK number &amp; details</h3>
+            <p>Share the Chamber of Commerce registration number and any additional company information requested by the agent.</p>
           </div>
         </div>
         <div class="step-row">
           <div class="step-num">3</div>
           <div>
-            <h3>Receive assessment</h3>
-            <p>Scout, Lens, Auditor &amp; Verdict deliver a compliance assessment.</p>
+            <h3>Confirm &amp; let the agents work</h3>
+            <p>Review your input, confirm, and let the Power Platform and the KYC Orchestration Agent do the rest.</p>
           </div>
         </div>
       </div>
 
-      <!-- Quick start -->
       <div class="qs-section">
         <div class="qs-label">Quick start</div>
-        <button class="btn-qs" onclick="sendQuickMessage('Hi')">
+        <button class="btn-qs" id="btn-hi">
           <div class="btn-qs-icon hi">&#x1F44B;</div>
           <div>
             <div class="btn-qs-title">Say hello</div>
             <div class="btn-qs-sub">Start a new intake conversation</div>
           </div>
         </button>
-        <button class="btn-qs" onclick="sendQuickMessage('Hi, I would like to start a KYC intake for Cegeka Nederland B.V. \u2014 KvK 09090774')">
+        <button class="btn-qs" id="btn-kvk">
           <div class="btn-qs-icon co">&#x1F3E2;</div>
           <div>
             <div class="btn-qs-title">Cegeka KvK example</div>
@@ -338,7 +303,6 @@
       </div>
     </div>
 
-    <!-- Right: Chat -->
     <div class="chat-panel">
       <div class="chat-header">
         <div class="chat-avatar">
@@ -377,11 +341,6 @@
     (function () {
       'use strict';
 
-      /* ────────────────────────────────────────────
-       *  TOKEN ENDPOINT
-       *  Replace with your bot's DirectLine token URL
-       *  from Copilot Studio > Channels > Custom website
-       * ──────────────────────────────────────────── */
       const TOKEN_ENDPOINT = 'https://5793d4d0276ee460804250c4354e18.1c.environment.api.powerplatform.com/powervirtualagents/botsbyschema/cgk_KYCDemoIntakeAgent/directline/token?api-version=2022-03-01-preview';
 
       const $ = id => document.getElementById(id);
@@ -389,25 +348,47 @@
       const errorEl   = $('error');
       const chatEl    = $('webchat');
 
-      let chatStore;
+      let chatStore = null;
+      let chatReady = false;
 
-      window.sendQuickMessage = function (text) {
-        if (chatStore) {
+      /* ── Send a message into the chat ── */
+      function sendMessage(text) {
+        if (chatStore && chatReady) {
           chatStore.dispatch({
             type: 'WEB_CHAT/SEND_MESSAGE',
-            payload: { text },
+            payload: { text: text },
           });
-        } else {
-          setTimeout(() => window.sendQuickMessage(text), 600);
+          return true;
         }
-      };
+        return false;
+      }
 
+      /* ── Retry wrapper for buttons (waits for chat to be ready) ── */
+      function sendWhenReady(text, attempts) {
+        attempts = attempts || 0;
+        if (sendMessage(text)) return;
+        if (attempts < 20) {
+          setTimeout(function () { sendWhenReady(text, attempts + 1); }, 500);
+        }
+      }
+
+      /* ── Quick-start button handlers ── */
+      $('btn-hi').addEventListener('click', function () {
+        sendWhenReady('Hi');
+      });
+
+      $('btn-kvk').addEventListener('click', function () {
+        sendWhenReady('Hi, I would like to start a KYC intake for Cegeka Nederland B.V. \u2014 KvK 09090774');
+      });
+
+      /* ── Error display ── */
       function showError(message, detail) {
         loadingEl.classList.add('hidden');
         errorEl.classList.add('show');
         errorEl.innerHTML = message + (detail ? '<code>' + detail + '</code>' : '');
       }
 
+      /* ── Resolve namespace & regional settings ── */
       const csPathIndex  = TOKEN_ENDPOINT.indexOf('/copilotstudio/');
       const pvaPathIndex = TOKEN_ENDPOINT.indexOf('/powervirtualagents/');
       const pathIndex    = csPathIndex !== -1 ? csPathIndex : pvaPathIndex;
@@ -426,11 +407,13 @@
       const regionalChannelSettingsURL =
         environmentEndpoint + '/' + namespace + '/regionalchannelsettings?api-version=' + apiVersion;
 
+      /* ── Store: startConversation event + auto-greeting ── */
       function createStore() {
         chatStore = window.WebChat.createStore(
           {},
           ({ dispatch }) => (next) => (action) => {
             if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
+              /* 1. Fire the startConversation event (required by Copilot Studio) */
               dispatch({
                 type: 'DIRECT_LINE/POST_ACTIVITY',
                 meta: { method: 'keyboard' },
@@ -442,6 +425,16 @@
                   },
                 },
               });
+
+              /* 2. Send an automatic "Hi" greeting after a short delay
+                    so the bot receives the startConversation first */
+              setTimeout(function () {
+                chatReady = true;
+                dispatch({
+                  type: 'WEB_CHAT/SEND_MESSAGE',
+                  payload: { text: 'Hi' },
+                });
+              }, 1500);
             }
             return next(action);
           }
@@ -449,6 +442,7 @@
         return chatStore;
       }
 
+      /* ── Boot ── */
       async function init() {
         try {
           let directLineURL = 'https://directline.botframework.com/v3/directline';
@@ -469,10 +463,10 @@
 
           const tokenRes = await fetch(TOKEN_ENDPOINT);
           if (!tokenRes.ok) {
-            const errorText = await tokenRes.text().catch(() => '');
+            const errorText = await tokenRes.text().catch(function () { return ''; });
             throw new Error(
               'Token request failed: ' + tokenRes.status + ' ' + tokenRes.statusText +
-              (errorText ? ' — ' + errorText.slice(0, 200) : '')
+              (errorText ? ' \u2014 ' + errorText.slice(0, 200) : '')
             );
           }
           const tokenData = await tokenRes.json();
@@ -482,7 +476,6 @@
             domain: directLineURL,
           });
 
-          /* ── Cegeka-branded style options ── */
           const styleOptions = {
             rootHeight: '100%',
             rootWidth: '100%',
@@ -498,7 +491,7 @@
             bubbleFromUserTextColor: '#ffffff',
 
             botAvatarInitials: 'KYC',
-            userAvatarInitials: '👤',
+            userAvatarInitials: '\uD83D\uDC64',
             avatarBorderRadius: '50%',
             avatarSize: 32,
             botAvatarBackgroundColor: '#0098C3',
@@ -530,9 +523,9 @@
 
           window.WebChat.renderWebChat(
             {
-              directLine,
+              directLine: directLine,
               store: createStore(),
-              styleOptions,
+              styleOptions: styleOptions,
               locale: 'en-US',
             },
             chatEl
