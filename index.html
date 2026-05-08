@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Agent Factory at Cegeka — Partner Onboarding</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYC Intake Agent — Cegeka</title>
 
   <!-- Bot Framework WebChat -->
   <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -20,20 +20,16 @@
       --brand-subtle: #f0fdfa;
       --accent: #06b6d4;
       --surface: #f8fafb;
-      --surface-card: #ffffff;
+      --card: #ffffff;
       --text: #0f172a;
-      --text-secondary: #475569;
+      --text-sec: #475569;
       --text-muted: #94a3b8;
       --border: #e2e8f0;
       --border-light: #f1f5f9;
       --radius: 16px;
       --radius-sm: 10px;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-      --shadow-lg: 0 8px 40px rgba(15,118,110,0.10), 0 2px 8px rgba(0,0,0,0.04);
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
@@ -43,257 +39,148 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ─── Navigation ─── */
+    /* ─── Nav ─── */
     .nav {
-      display: flex;
-      align-items: center;
-      padding: 0 40px;
-      height: 64px;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      display: flex; align-items: center;
+      padding: 0 36px; height: 60px;
+      background: #fff; border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; z-index: 100;
     }
-
     .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
-      font-size: 15px;
-      color: var(--text);
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 700; font-size: 15px; color: var(--text);
       text-decoration: none;
     }
-
     .nav-logo-icon {
-      width: 30px; height: 30px;
-      background: var(--brand);
-      border-radius: 8px;
-      display: grid; place-items: center;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 800;
+      width: 30px; height: 30px; background: var(--brand);
+      border-radius: 8px; display: grid; place-items: center;
+      color: #fff; font-size: 13px; font-weight: 800;
     }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      margin-left: 48px;
-    }
-
-    .nav-links a {
-      padding: 20px 20px;
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-decoration: none;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-    }
-
-    .nav-links a:hover, .nav-links a.active {
-      color: var(--brand-dark);
-      border-bottom-color: var(--brand);
-    }
-
-    .nav-right {
+    .nav-badge {
       margin-left: auto;
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--brand-subtle); color: var(--brand-dark);
+      padding: 5px 14px; border-radius: 20px;
     }
 
-    .nav-right button {
-      background: none; border: none; cursor: pointer;
-      color: var(--text-secondary); padding: 8px; border-radius: 8px;
-      transition: background 0.2s;
-    }
-
-    .nav-right button:hover { background: var(--border-light); }
-
-    .nav-signin {
-      font-size: 13.5px; font-weight: 600;
-      color: var(--text-secondary); text-decoration: none;
-      padding: 8px 16px; border-radius: 8px; transition: all 0.2s;
-    }
-
-    .nav-signin:hover { background: var(--border-light); }
-
-    /* ─── Hero ─── */
-    .hero {
-      background: linear-gradient(135deg, #0f766e 0%, #0d9488 40%, #2dd4bf 100%);
-      padding: 72px 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 50% at 10% 90%, rgba(255,255,255,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 60% at 90% 20%, rgba(255,255,255,0.06) 0%, transparent 60%);
-    }
-
-    .hero h1 {
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 800;
-      color: #fff;
-      line-height: 1.2;
-      max-width: 700px;
-      margin: 0 auto;
-      position: relative;
-      letter-spacing: -0.02em;
-    }
-
-    /* ─── Intro ─── */
-    .intro {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 56px 40px;
-      text-align: center;
-    }
-
-    .intro p {
-      font-size: 16px; line-height: 1.7;
-      color: var(--text-secondary); margin-bottom: 16px;
-    }
-
-    .intro strong { color: var(--text); font-weight: 700; }
-
-    .intro .tagline {
-      font-size: 14px; color: var(--text-muted);
-      font-style: italic; margin-top: 8px;
-    }
-
-    /* ─── Main two-column ─── */
+    /* ─── Main layout ─── */
     .main {
-      max-width: 1140px;
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 0 40px 80px;
+      padding: 36px 36px 60px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 32px;
+      gap: 28px;
       align-items: start;
     }
 
-    /* ─── How it works panel ─── */
-    .how-panel {
-      background: var(--surface-card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 40px;
-      box-shadow: var(--shadow-sm);
+    /* ─── Left panel ─── */
+    .info-panel {
+      display: flex; flex-direction: column; gap: 24px;
     }
 
-    .how-label {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
-      color: var(--brand); margin-bottom: 16px;
-    }
-
-    .how-panel h2 {
-      font-size: 28px; font-weight: 800; line-height: 1.2;
+    .welcome h1 {
+      font-size: 26px; font-weight: 800; line-height: 1.25;
       letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px;
     }
-
-    .how-panel .subtitle {
-      font-size: 14px; color: var(--text-secondary);
-      line-height: 1.6; margin-bottom: 36px;
+    .welcome p {
+      font-size: 14.5px; color: var(--text-sec); line-height: 1.65;
     }
 
-    .agent-step {
-      display: flex; gap: 16px;
-      padding: 20px 0;
+    /* Video */
+    .video-card {
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid var(--border); overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .video-card iframe {
+      width: 100%; aspect-ratio: 16/9;
+      border: none; display: block;
+    }
+
+    /* How it works */
+    .steps-card {
+      background: var(--card); border-radius: var(--radius);
+      border: 1px solid var(--border); padding: 24px 28px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .steps-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--brand); margin-bottom: 16px;
+    }
+    .step-row {
+      display: flex; gap: 14px; padding: 14px 0;
       border-top: 1px solid var(--border-light);
     }
-
-    .agent-step:last-child { border-bottom: 1px solid var(--border-light); }
-
-    .step-number {
-      width: 32px; height: 32px; border-radius: 50%;
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
       display: grid; place-items: center;
-      font-size: 13px; font-weight: 700;
-      flex-shrink: 0; margin-top: 2px;
+      font-size: 12px; font-weight: 700;
+      background: var(--brand); color: #fff;
     }
+    .step-row h3 { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .step-row p { font-size: 12px; color: var(--text-muted); line-height: 1.45; }
 
-    .step-number.complete { background: var(--brand); color: #fff; }
-
-    .step-number.active {
-      background: var(--brand-light); color: #fff;
-      animation: pulse-step 2s ease-in-out infinite;
+    /* Quick start buttons */
+    .qs-section { display: flex; flex-direction: column; gap: 10px; }
+    .qs-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted);
     }
-
-    .step-number.waiting {
-      background: var(--border-light); color: var(--text-muted);
-      border: 1.5px solid var(--border);
+    .btn-qs {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border); background: var(--card);
+      cursor: pointer; transition: all 0.15s ease;
+      text-align: left; font-family: inherit;
     }
-
-    @keyframes pulse-step {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(20,184,166,0.3); }
-      50% { box-shadow: 0 0 0 6px rgba(20,184,166,0); }
+    .btn-qs:hover {
+      border-color: var(--brand); background: var(--brand-subtle);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(13,148,136,0.10);
     }
-
-    .step-content h3 { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-    .step-content p { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
-
-    .step-badge {
-      display: inline-block; font-size: 11px; font-weight: 600;
-      padding: 2px 10px; border-radius: 20px; margin-top: 6px;
+    .btn-qs:active { transform: translateY(0); }
+    .btn-qs-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: grid; place-items: center; flex-shrink: 0; font-size: 18px;
     }
+    .btn-qs-icon.hi { background: var(--brand-subtle); }
+    .btn-qs-icon.co { background: #fff7ed; }
+    .btn-qs-title { font-size: 13.5px; font-weight: 700; color: var(--text); }
+    .btn-qs-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
 
-    .step-badge.complete { background: #ecfdf5; color: #059669; }
-
-    .step-badge.running {
-      background: #f0fdfa; color: var(--brand);
-      animation: pulse-badge 1.5s ease-in-out infinite;
+    .powered {
+      font-size: 11px; color: var(--text-muted);
+      display: flex; align-items: center; gap: 6px;
+      padding-top: 8px;
     }
-
-    @keyframes pulse-badge {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
-
-    .step-badge.waiting { background: var(--border-light); color: var(--text-muted); }
 
     /* ─── Chat panel ─── */
     .chat-panel {
-      background: var(--surface-card);
+      background: var(--card);
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      box-shadow: var(--shadow-lg);
-      display: flex;
-      flex-direction: column;
-      height: 640px;
-      overflow: hidden;
-      position: sticky;
-      top: 88px;
+      box-shadow: 0 8px 40px rgba(15,118,110,0.08), 0 2px 8px rgba(0,0,0,0.04);
+      display: flex; flex-direction: column;
+      height: 680px; overflow: hidden;
+      position: sticky; top: 80px;
     }
-
     .chat-header {
-      padding: 20px 24px;
+      padding: 18px 24px;
       background: linear-gradient(135deg, #f0fdfa 0%, #e0f7f5 100%);
       border-bottom: 1px solid var(--border);
-      text-align: center;
+      display: flex; align-items: center; gap: 14px;
     }
-
     .chat-avatar {
-      width: 64px; height: 64px;
-      border-radius: 50%;
+      width: 44px; height: 44px; border-radius: 50%;
       background: linear-gradient(135deg, var(--brand-light), var(--accent));
-      margin: 0 auto 10px;
       display: grid; place-items: center;
-      box-shadow: 0 4px 16px rgba(13,148,136,0.2);
+      box-shadow: 0 3px 10px rgba(13,148,136,0.2);
     }
-
-    .chat-avatar svg { width: 36px; height: 36px; color: #fff; }
-
-    .chat-header-name { font-size: 16px; font-weight: 700; color: var(--text); }
-    .chat-header-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .chat-avatar svg { width: 24px; height: 24px; color: #fff; }
+    .chat-header-info h2 { font-size: 15px; font-weight: 700; color: var(--text); }
+    .chat-header-info p { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
 
     #webchat { flex: 1; min-height: 0; overflow: hidden; }
     #webchat > * { height: 100%; }
@@ -301,19 +188,16 @@
     .loading {
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 16px; color: var(--text-muted); font-size: 13px;
+      gap: 14px; color: var(--text-muted); font-size: 13px;
     }
-
     .loading.hidden { display: none; }
-
     .spinner {
-      width: 32px; height: 32px;
+      width: 30px; height: 30px;
       border: 3px solid var(--border);
       border-top-color: var(--brand);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .error-banner {
@@ -322,13 +206,11 @@
       border-radius: var(--radius-sm); color: #991b1b;
       font-size: 13px; line-height: 1.5;
     }
-
     .error-banner.show { display: block; }
-
     .error-banner code {
       display: block; margin-top: 8px; padding: 8px 10px;
       background: rgba(0,0,0,0.04); border-radius: 6px;
-      font-family: 'Space Mono', monospace; font-size: 11px;
+      font-family: monospace; font-size: 11px;
       word-break: break-all; color: #7f1d1d;
     }
 
@@ -338,101 +220,99 @@
       border-top: 1px solid var(--border-light); background: #fafbfc;
     }
 
+    /* ─── Footer ─── */
     .page-footer {
-      padding: 32px 40px; text-align: center;
+      padding: 28px 36px; text-align: center;
       font-size: 12px; color: var(--text-muted);
       border-top: 1px solid var(--border); background: #fff;
     }
-
     .page-footer a { color: var(--brand); text-decoration: none; font-weight: 600; }
 
     @media (max-width: 900px) {
-      .nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      .hero { padding: 48px 20px; }
-      .intro { padding: 40px 20px; }
-      .main { grid-template-columns: 1fr; padding: 0 20px 60px; }
-      .chat-panel { position: static; height: 560px; }
+      .main { grid-template-columns: 1fr; padding: 24px 20px 48px; }
+      .chat-panel { position: static; height: 580px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
+  <!-- Nav -->
   <nav class="nav">
     <a href="#" class="nav-logo">
-      <span class="nav-logo-icon">af</span>
+      <span class="nav-logo-icon">C</span>
       Agent Factory at Cegeka
     </a>
-    <div class="nav-links">
-      <a href="#" class="active">Our Partners</a>
-      <a href="#">My Application</a>
-    </div>
-    <div class="nav-right">
-      <button aria-label="Search">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-      </button>
-      <a href="#" class="nav-signin">Sign in</a>
-    </div>
+    <div class="nav-badge">KYC Demo</div>
   </nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <h1>Shaping partnerships by weaving intelligence, trust and process into one.</h1>
-  </section>
-
-  <!-- Intro -->
-  <section class="intro">
-    <p>Most partnership processes fail not because the candidates are wrong — but because no one had the time to look closely enough, verify consistently, or decide with confidence.</p>
-    <p>We built <strong>Agent Factory</strong> to fix that. Four AI agents handle the research, verification and scoring so your partner team can focus on relationships — not paperwork.</p>
-    <p class="tagline">We question the application before we approve it.</p>
-  </section>
-
-  <!-- Main content -->
+  <!-- Main -->
   <section class="main">
 
-    <!-- Left: How it works -->
-    <div class="how-panel">
-      <div class="how-label">How it works</div>
-      <h2>Four agents.<br>One qualified answer.</h2>
-      <p class="subtitle">Each agent hands off to the next, building a complete picture of your organisation before Verdict produces an explainable qualification report.</p>
+    <!-- Left: Info -->
+    <div class="info-panel">
 
-      <div class="agent-step">
-        <div class="step-number complete">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="welcome">
+        <h1>Welcome to our<br>KYC Intake Agent</h1>
+        <p>Our AI-powered Know Your Customer agent guides you through the due diligence intake process &mdash; fast, compliant, and always available.</p>
+      </div>
+
+      <!-- Video — replace VIDEO_ID with your YouTube video ID -->
+      <div class="video-card">
+        <iframe
+          src="https://www.youtube.com/embed/VIDEO_ID"
+          title="KYC Agent Introduction"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+
+      <!-- How it works -->
+      <div class="steps-card">
+        <div class="steps-label">How it works</div>
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Start a conversation</h3>
+            <p>Use a quick-start button or type your own message to begin the intake.</p>
+          </div>
         </div>
-        <div class="step-content">
-          <h3>Scout — Web Research</h3>
-          <p>Company registration, market presence, news and adverse media screening.</p>
-          <span class="step-badge complete">Complete</span>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div>
+            <h3>Provide company details</h3>
+            <p>The agent collects company information and verifies identity step by step.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div>
+            <h3>Receive assessment</h3>
+            <p>Scout, Lens, Auditor &amp; Verdict deliver a compliance assessment.</p>
+          </div>
         </div>
       </div>
 
-      <div class="agent-step">
-        <div class="step-number active">2</div>
-        <div class="step-content">
-          <h3>Lens — LinkedIn Vision</h3>
-          <p>Computer vision reads the contact's public profile and verifies consistency with the application.</p>
-          <span class="step-badge running">Running…</span>
-        </div>
+      <!-- Quick start -->
+      <div class="qs-section">
+        <div class="qs-label">Quick start</div>
+        <button class="btn-qs" onclick="sendQuickMessage('Hi')">
+          <div class="btn-qs-icon hi">&#x1F44B;</div>
+          <div>
+            <div class="btn-qs-title">Say hello</div>
+            <div class="btn-qs-sub">Start a new intake conversation</div>
+          </div>
+        </button>
+        <button class="btn-qs" onclick="sendQuickMessage('Hi, I would like to start a KYC intake for Cegeka Nederland B.V. \u2014 KvK 09090774')">
+          <div class="btn-qs-icon co">&#x1F3E2;</div>
+          <div>
+            <div class="btn-qs-title">Cegeka KvK example</div>
+            <div class="btn-qs-sub">Pre-filled with KvK 09090774</div>
+          </div>
+        </button>
       </div>
 
-      <div class="agent-step">
-        <div class="step-number waiting">3</div>
-        <div class="step-content">
-          <h3>Auditor — Document Analysis</h3>
-          <p>Cross-references uploaded credentials against partner criteria and Scout's findings.</p>
-          <span class="step-badge waiting">Waiting</span>
-        </div>
-      </div>
-
-      <div class="agent-step">
-        <div class="step-number waiting">4</div>
-        <div class="step-content">
-          <h3>Verdict — Qualification Score</h3>
-          <p>Scores five dimensions and produces an explainable recommendation: Qualified, Conditional, or Not Qualified.</p>
-          <span class="step-badge waiting">Waiting</span>
-        </div>
+      <div class="powered">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Powered by Microsoft Copilot Studio &amp; Cegeka Agent Factory
       </div>
     </div>
 
@@ -445,13 +325,15 @@
             <path d="M6 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
           </svg>
         </div>
-        <div class="chat-header-name">Alex</div>
-        <div class="chat-header-role">Partner Onboarding · Agent Factory</div>
+        <div class="chat-header-info">
+          <h2>KYC Intake Agent</h2>
+          <p>Agent Factory &middot; Cegeka</p>
+        </div>
       </div>
 
       <div class="loading" id="loading">
         <div class="spinner"></div>
-        Connecting to Alex…
+        Connecting to agent&hellip;
       </div>
 
       <div class="error-banner" id="error"></div>
@@ -459,36 +341,57 @@
       <div id="webchat" style="display:none;"></div>
 
       <div class="chat-footer">
-        Powered by Copilot Studio · Conversations may be recorded for quality purposes
+        Powered by Copilot Studio &middot; Conversations may be recorded for quality purposes
       </div>
     </div>
 
   </section>
 
   <footer class="page-footer">
-    &copy; 2025 <a href="#">Cegeka</a> · Agent Factory · All rights reserved
+    &copy; 2025 <a href="#">Cegeka</a> &middot; Agent Factory &middot; All rights reserved
   </footer>
 
   <script>
     (function () {
       'use strict';
 
-      const TOKEN_ENDPOINT = 'https://5793d4d0276ee460804250c4354e18.1c.environment.api.powerplatform.com/powervirtualagents/botsbyschema/cgk_KYCWebsiteIntakeAgent/directline/token?api-version=2022-03-01-preview';
+      /* ────────────────────────────────────────────
+       *  TOKEN ENDPOINT
+       *  Replace with your bot's DirectLine token URL
+       *  from Copilot Studio > Channels > Custom website
+       * ──────────────────────────────────────────── */
+      const TOKEN_ENDPOINT = 'https://5793d4d0276ee460804250c4354e18.1c.environment.api.powerplatform.com/powervirtualagents/botsbyschema/cgk_KYCDemoIntakeAgent/directline/token?api-version=2022-03-01-preview';
 
       const $ = id => document.getElementById(id);
       const loadingEl = $('loading');
       const errorEl   = $('error');
       const chatEl    = $('webchat');
 
+      /* ── Store ref for quick-start buttons ── */
+      let chatStore;
+
+      window.sendQuickMessage = function (text) {
+        if (chatStore) {
+          chatStore.dispatch({
+            type: 'WEB_CHAT/SEND_MESSAGE',
+            payload: { text },
+          });
+        } else {
+          setTimeout(() => window.sendQuickMessage(text), 600);
+        }
+      };
+
+      /* ── Error handling ── */
       function showError(message, detail) {
         loadingEl.classList.add('hidden');
         errorEl.classList.add('show');
         errorEl.innerHTML = message + (detail ? `<code>${detail}</code>` : '');
       }
 
-      const csPathIndex = TOKEN_ENDPOINT.indexOf('/copilotstudio/');
+      /* ── Resolve namespace & regional settings ── */
+      const csPathIndex  = TOKEN_ENDPOINT.indexOf('/copilotstudio/');
       const pvaPathIndex = TOKEN_ENDPOINT.indexOf('/powervirtualagents/');
-      const pathIndex = csPathIndex !== -1 ? csPathIndex : pvaPathIndex;
+      const pathIndex    = csPathIndex !== -1 ? csPathIndex : pvaPathIndex;
 
       if (pathIndex === -1) {
         showError('<strong>Invalid token endpoint.</strong>');
@@ -504,8 +407,9 @@
       const regionalChannelSettingsURL =
         `${environmentEndpoint}/${namespace}/regionalchannelsettings?api-version=${apiVersion}`;
 
+      /* ── Store with startConversation event ── */
       function createStore() {
-        return window.WebChat.createStore(
+        chatStore = window.WebChat.createStore(
           {},
           ({ dispatch }) => (next) => (action) => {
             if (action.type === 'DIRECT_LINE/CONNECT_FULFILLED') {
@@ -524,8 +428,10 @@
             return next(action);
           }
         );
+        return chatStore;
       }
 
+      /* ── Boot ── */
       async function init() {
         try {
           let directLineURL = 'https://directline.botframework.com/v3/directline';
@@ -573,7 +479,7 @@
             bubbleFromUserBorderRadius: 14,
             bubbleFromUserTextColor: '#ffffff',
 
-            botAvatarInitials: 'A',
+            botAvatarInitials: 'KYC',
             userAvatarInitials: '👤',
             avatarBorderRadius: '50%',
             avatarSize: 32,
@@ -616,12 +522,10 @@
 
         } catch (err) {
           console.error('[Chat] Initialisation failed:', err);
-
           const isCors = err.message === 'Failed to fetch';
           const hint = isCors
             ? '<br><br><strong>Likely a CORS error.</strong> Check that "Require secured access" is OFF in Copilot Studio and the agent is published.'
             : '';
-
           showError(
             '<strong>Could not connect to the assistant.</strong>' + hint,
             err.message
