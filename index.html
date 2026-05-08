@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KYC Intake Agent — Cegeka</title>
+  <meta name="theme-color" content="#0098C3">
 
   <!-- Bot Framework WebChat -->
   <script src="https://cdn.botframework.com/botframework-webchat/latest/webchat.js"></script>
@@ -14,21 +15,30 @@
 
   <style>
     :root {
-      --brand: #0d9488;
-      --brand-dark: #0f766e;
-      --brand-light: #14b8a6;
-      --brand-subtle: #f0fdfa;
-      --accent: #06b6d4;
-      --surface: #f8fafb;
-      --card: #ffffff;
-      --text: #0f172a;
-      --text-sec: #475569;
-      --text-muted: #94a3b8;
-      --border: #e2e8f0;
-      --border-light: #f1f5f9;
+      /* Cegeka brand palette */
+      --brand: #0098C3;
+      --brand-dark: #007A9E;
+      --brand-darker: #005F7A;
+      --brand-light: #00B4E6;
+      --brand-subtle: #E8F6FB;
+      --brand-glow: rgba(0, 152, 195, 0.12);
+
+      /* Neutrals */
+      --surface: #F7F9FB;
+      --card: #FFFFFF;
+      --text: #0D1B2A;
+      --text-sec: #3D5A73;
+      --text-muted: #8DA0B3;
+      --border: #DDE4EB;
+      --border-light: #EEF2F6;
+
+      /* Layout */
       --radius: 16px;
       --radius-sm: 10px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow-lg: 0 8px 40px rgba(0,152,195,0.10), 0 2px 8px rgba(0,0,0,0.03);
     }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -47,14 +57,21 @@
       position: sticky; top: 0; z-index: 100;
     }
     .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      font-weight: 700; font-size: 15px; color: var(--text);
+      display: flex; align-items: center; gap: 12px;
       text-decoration: none;
     }
-    .nav-logo-icon {
-      width: 30px; height: 30px; background: var(--brand);
-      border-radius: 8px; display: grid; place-items: center;
-      color: #fff; font-size: 13px; font-weight: 800;
+    .nav-logo img {
+      height: 28px; width: auto;
+    }
+    .nav-logo-fallback {
+      font-weight: 800; font-size: 18px; color: var(--brand);
+      letter-spacing: -0.3px;
+    }
+    .nav-divider {
+      width: 1px; height: 24px; background: var(--border); margin: 0 16px;
+    }
+    .nav-title {
+      font-size: 14px; font-weight: 600; color: var(--text-sec);
     }
     .nav-badge {
       margin-left: auto;
@@ -84,6 +101,7 @@
       font-size: 26px; font-weight: 800; line-height: 1.25;
       letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px;
     }
+    .welcome h1 span { color: var(--brand); }
     .welcome p {
       font-size: 14.5px; color: var(--text-sec); line-height: 1.65;
     }
@@ -92,7 +110,7 @@
     .video-card {
       background: var(--card); border-radius: var(--radius);
       border: 1px solid var(--border); overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      box-shadow: var(--shadow-sm);
     }
     .video-card iframe {
       width: 100%; aspect-ratio: 16/9;
@@ -103,11 +121,12 @@
     .steps-card {
       background: var(--card); border-radius: var(--radius);
       border: 1px solid var(--border); padding: 24px 28px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      box-shadow: var(--shadow-sm);
     }
     .steps-label {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.08em; color: var(--brand); margin-bottom: 16px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--brand); margin-bottom: 16px;
     }
     .step-row {
       display: flex; gap: 14px; padding: 14px 0;
@@ -120,7 +139,7 @@
       background: var(--brand); color: #fff;
     }
     .step-row h3 { font-size: 13.5px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-    .step-row p { font-size: 12px; color: var(--text-muted); line-height: 1.45; }
+    .step-row p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
     /* Quick start buttons */
     .qs-section { display: flex; flex-direction: column; gap: 10px; }
@@ -138,7 +157,7 @@
     .btn-qs:hover {
       border-color: var(--brand); background: var(--brand-subtle);
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(13,148,136,0.10);
+      box-shadow: 0 4px 12px var(--brand-glow);
     }
     .btn-qs:active { transform: translateY(0); }
     .btn-qs-icon {
@@ -146,7 +165,7 @@
       display: grid; place-items: center; flex-shrink: 0; font-size: 18px;
     }
     .btn-qs-icon.hi { background: var(--brand-subtle); }
-    .btn-qs-icon.co { background: #fff7ed; }
+    .btn-qs-icon.co { background: #FFF3E6; }
     .btn-qs-title { font-size: 13.5px; font-weight: 700; color: var(--text); }
     .btn-qs-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
 
@@ -161,22 +180,22 @@
       background: var(--card);
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      box-shadow: 0 8px 40px rgba(15,118,110,0.08), 0 2px 8px rgba(0,0,0,0.04);
+      box-shadow: var(--shadow-lg);
       display: flex; flex-direction: column;
       height: 680px; overflow: hidden;
       position: sticky; top: 80px;
     }
     .chat-header {
       padding: 18px 24px;
-      background: linear-gradient(135deg, #f0fdfa 0%, #e0f7f5 100%);
+      background: linear-gradient(135deg, var(--brand-subtle) 0%, #D9F0F8 100%);
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; gap: 14px;
     }
     .chat-avatar {
       width: 44px; height: 44px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--brand-light), var(--accent));
+      background: linear-gradient(135deg, var(--brand), var(--brand-dark));
       display: grid; place-items: center;
-      box-shadow: 0 3px 10px rgba(13,148,136,0.2);
+      box-shadow: 0 3px 10px rgba(0,152,195,0.25);
     }
     .chat-avatar svg { width: 24px; height: 24px; color: #fff; }
     .chat-header-info h2 { font-size: 15px; font-weight: 700; color: var(--text); }
@@ -202,8 +221,8 @@
 
     .error-banner {
       display: none; margin: 16px; padding: 14px 18px;
-      background: #fef2f2; border: 1px solid #fca5a5;
-      border-radius: var(--radius-sm); color: #991b1b;
+      background: #FEF2F2; border: 1px solid #FCA5A5;
+      border-radius: var(--radius-sm); color: #991B1B;
       font-size: 13px; line-height: 1.5;
     }
     .error-banner.show { display: block; }
@@ -211,13 +230,13 @@
       display: block; margin-top: 8px; padding: 8px 10px;
       background: rgba(0,0,0,0.04); border-radius: 6px;
       font-family: monospace; font-size: 11px;
-      word-break: break-all; color: #7f1d1d;
+      word-break: break-all; color: #7F1D1D;
     }
 
     .chat-footer {
       padding: 8px 16px; text-align: center;
       font-size: 10.5px; color: var(--text-muted);
-      border-top: 1px solid var(--border-light); background: #fafbfc;
+      border-top: 1px solid var(--border-light); background: #FAFBFC;
     }
 
     /* ─── Footer ─── */
@@ -229,6 +248,7 @@
     .page-footer a { color: var(--brand); text-decoration: none; font-weight: 600; }
 
     @media (max-width: 900px) {
+      .nav { padding: 0 20px; }
       .main { grid-template-columns: 1fr; padding: 24px 20px 48px; }
       .chat-panel { position: static; height: 580px; }
     }
@@ -238,10 +258,12 @@
 
   <!-- Nav -->
   <nav class="nav">
-    <a href="#" class="nav-logo">
-      <span class="nav-logo-icon">C</span>
-      Agent Factory at Cegeka
+    <a href="https://www.cegeka.com" class="nav-logo" target="_blank" rel="noopener">
+      <img src="https://www.cegeka.com/hubfs/Cegeka_Logo.svg" alt="Cegeka" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+      <span class="nav-logo-fallback" style="display:none">cegeka</span>
     </a>
+    <div class="nav-divider"></div>
+    <span class="nav-title">Agent Factory</span>
     <div class="nav-badge">KYC Demo</div>
   </nav>
 
@@ -252,7 +274,7 @@
     <div class="info-panel">
 
       <div class="welcome">
-        <h1>Welcome to our<br>KYC Intake Agent</h1>
+        <h1>Welcome to our<br><span>KYC Intake Agent</span></h1>
         <p>Our AI-powered Know Your Customer agent guides you through the due diligence intake process &mdash; fast, compliant, and always available.</p>
       </div>
 
@@ -348,7 +370,7 @@
   </section>
 
   <footer class="page-footer">
-    &copy; 2025 <a href="#">Cegeka</a> &middot; Agent Factory &middot; All rights reserved
+    &copy; 2025 <a href="https://www.cegeka.com" target="_blank" rel="noopener">Cegeka</a> &middot; Agent Factory &middot; All rights reserved
   </footer>
 
   <script>
@@ -367,7 +389,6 @@
       const errorEl   = $('error');
       const chatEl    = $('webchat');
 
-      /* ── Store ref for quick-start buttons ── */
       let chatStore;
 
       window.sendQuickMessage = function (text) {
@@ -381,14 +402,12 @@
         }
       };
 
-      /* ── Error handling ── */
       function showError(message, detail) {
         loadingEl.classList.add('hidden');
         errorEl.classList.add('show');
-        errorEl.innerHTML = message + (detail ? `<code>${detail}</code>` : '');
+        errorEl.innerHTML = message + (detail ? '<code>' + detail + '</code>' : '');
       }
 
-      /* ── Resolve namespace & regional settings ── */
       const csPathIndex  = TOKEN_ENDPOINT.indexOf('/copilotstudio/');
       const pvaPathIndex = TOKEN_ENDPOINT.indexOf('/powervirtualagents/');
       const pathIndex    = csPathIndex !== -1 ? csPathIndex : pvaPathIndex;
@@ -405,9 +424,8 @@
 
       const namespace = csPathIndex !== -1 ? 'copilotstudio' : 'powervirtualagents';
       const regionalChannelSettingsURL =
-        `${environmentEndpoint}/${namespace}/regionalchannelsettings?api-version=${apiVersion}`;
+        environmentEndpoint + '/' + namespace + '/regionalchannelsettings?api-version=' + apiVersion;
 
-      /* ── Store with startConversation event ── */
       function createStore() {
         chatStore = window.WebChat.createStore(
           {},
@@ -431,7 +449,6 @@
         return chatStore;
       }
 
-      /* ── Boot ── */
       async function init() {
         try {
           let directLineURL = 'https://directline.botframework.com/v3/directline';
@@ -454,8 +471,8 @@
           if (!tokenRes.ok) {
             const errorText = await tokenRes.text().catch(() => '');
             throw new Error(
-              `Token request failed: ${tokenRes.status} ${tokenRes.statusText}` +
-              (errorText ? ` — ${errorText.slice(0, 200)}` : '')
+              'Token request failed: ' + tokenRes.status + ' ' + tokenRes.statusText +
+              (errorText ? ' — ' + errorText.slice(0, 200) : '')
             );
           }
           const tokenData = await tokenRes.json();
@@ -465,16 +482,17 @@
             domain: directLineURL,
           });
 
+          /* ── Cegeka-branded style options ── */
           const styleOptions = {
             rootHeight: '100%',
             rootWidth: '100%',
             backgroundColor: '#ffffff',
 
-            bubbleBackground: '#f0fdfa',
+            bubbleBackground: '#E8F6FB',
             bubbleBorderColor: 'transparent',
             bubbleBorderRadius: 14,
-            bubbleTextColor: '#0f172a',
-            bubbleFromUserBackground: '#0d9488',
+            bubbleTextColor: '#0D1B2A',
+            bubbleFromUserBackground: '#0098C3',
             bubbleFromUserBorderColor: 'transparent',
             bubbleFromUserBorderRadius: 14,
             bubbleFromUserTextColor: '#ffffff',
@@ -483,25 +501,25 @@
             userAvatarInitials: '👤',
             avatarBorderRadius: '50%',
             avatarSize: 32,
-            botAvatarBackgroundColor: '#0d9488',
-            userAvatarBackgroundColor: '#475569',
+            botAvatarBackgroundColor: '#0098C3',
+            userAvatarBackgroundColor: '#3D5A73',
 
-            sendBoxBackground: '#f8fafb',
-            sendBoxBorderTop: '1px solid #e2e8f0',
-            sendBoxTextColor: '#0f172a',
-            sendBoxPlaceholderColor: '#94a3b8',
-            sendBoxButtonColor: '#0d9488',
-            sendBoxButtonColorOnHover: '#0f766e',
-            sendBoxButtonColorOnFocus: '#0f766e',
+            sendBoxBackground: '#F7F9FB',
+            sendBoxBorderTop: '1px solid #DDE4EB',
+            sendBoxTextColor: '#0D1B2A',
+            sendBoxPlaceholderColor: '#8DA0B3',
+            sendBoxButtonColor: '#0098C3',
+            sendBoxButtonColorOnHover: '#007A9E',
+            sendBoxButtonColorOnFocus: '#007A9E',
 
             suggestedActionBackgroundColor: '#ffffff',
-            suggestedActionBorderColor: '#e2e8f0',
+            suggestedActionBorderColor: '#DDE4EB',
             suggestedActionBorderRadius: 10,
-            suggestedActionTextColor: '#0d9488',
+            suggestedActionTextColor: '#0098C3',
 
             primaryFont: "'Plus Jakarta Sans', system-ui, sans-serif",
             fontSizeSmall: '13px',
-            subtle: '#94a3b8',
+            subtle: '#8DA0B3',
 
             hideUploadButton: false,
             autoScrollSnapOnPage: true,
@@ -522,8 +540,8 @@
 
         } catch (err) {
           console.error('[Chat] Initialisation failed:', err);
-          const isCors = err.message === 'Failed to fetch';
-          const hint = isCors
+          var isCors = err.message === 'Failed to fetch';
+          var hint = isCors
             ? '<br><br><strong>Likely a CORS error.</strong> Check that "Require secured access" is OFF in Copilot Studio and the agent is published.'
             : '';
           showError(
