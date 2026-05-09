@@ -71,7 +71,7 @@
 
     /* ─── Main ─── */
     .main {
-      max-width: 1120px; margin: 0 auto;
+      max-width: 1360px; margin: 0 auto;
       padding: 36px 36px 60px;
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 28px; align-items: start;
@@ -91,9 +91,55 @@
       border: 1px solid var(--border); overflow: hidden;
       box-shadow: var(--shadow-sm);
     }
+    .video-card[open] .toggle-hint::before { content: '(click to collapse)'; }
+    .video-card:not([open]) .toggle-hint::before { content: '(click to expand)'; }
+    .toggle-hint { font-size: 0; }
+    .video-toggle {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 18px; cursor: pointer;
+      font-size: 13.5px; font-weight: 600; color: var(--text);
+      list-style: none; user-select: none;
+    }
+    .video-toggle::-webkit-details-marker { display: none; }
+    .video-toggle svg { color: var(--brand); flex-shrink: 0; }
+    .video-toggle .toggle-hint {
+      font-size: 11px; font-weight: 400; color: var(--text-muted); margin-left: auto;
+    }
     .video-card iframe {
       width: 100%; aspect-ratio: 16/9; border: none; display: block;
     }
+
+    /* ─── Chat column wrapper ─── */
+    .chat-column {
+      display: flex; flex-direction: column; gap: 12px;
+      position: sticky; top: 80px;
+    }
+
+    /* ─── Quick reply buttons ─── */
+    .quick-replies {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0 4px;
+    }
+    .qr-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--text-muted); white-space: nowrap;
+    }
+    .qr-buttons { display: flex; gap: 8px; flex: 1; }
+    .btn-qr {
+      flex: 1; padding: 10px 16px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border); background: var(--card);
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      color: var(--text); cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-qr:hover {
+      border-color: var(--brand); background: var(--brand-subtle);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px var(--brand-glow);
+    }
+    .btn-qr:active { transform: translateY(0); }
+    .btn-qr-no:hover { border-color: #E53E3E; background: #FFF5F5; }
+    .btn-qr-proceed:hover { border-color: var(--brand); background: var(--brand-subtle); }
 
     .steps-card {
       background: var(--card); border-radius: var(--radius);
@@ -156,7 +202,6 @@
       border: 1px solid var(--border); box-shadow: var(--shadow-lg);
       display: flex; flex-direction: column;
       height: 680px; overflow: hidden;
-      position: sticky; top: 80px;
     }
     .chat-header {
       padding: 18px 24px;
@@ -222,7 +267,8 @@
     @media (max-width: 900px) {
       .nav { padding: 0 20px; }
       .main { grid-template-columns: 1fr; padding: 24px 20px 48px; }
-      .chat-panel { position: static; height: 580px; }
+      .chat-column { position: static; }
+      .chat-panel { height: 580px; }
     }
   </style>
 </head>
@@ -247,7 +293,12 @@
         <p>Our AI-powered Know Your Customer agent guides you through the due diligence intake process &mdash; fast, compliant, and always available.</p>
       </div>
 
-      <div class="video-card">
+      <details class="video-card" open>
+        <summary class="video-toggle">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Watch introduction video
+          <span class="toggle-hint">(click to collapse)</span>
+        </summary>
         <video
           src="kyc_intro_video.mp4"
           controls
@@ -256,7 +307,7 @@
           poster=""
           style="width:100%;aspect-ratio:16/9;display:block;background:#000;">
         </video>
-      </div>
+      </details>
 
       <div class="steps-card">
         <div class="steps-label">How it works</div>
@@ -307,6 +358,7 @@
       </div>
     </div>
 
+    <div class="chat-column">
     <div class="chat-panel">
       <div class="chat-header">
         <div class="chat-avatar">
@@ -333,6 +385,17 @@
       <div class="chat-footer">
         Powered by Copilot Studio &middot; Conversations may be recorded for quality purposes
       </div>
+    </div>
+
+    <!-- Quick reply buttons -->
+    <div class="quick-replies">
+      <span class="qr-label">Quick replies</span>
+      <div class="qr-buttons">
+        <button class="btn-qr" id="btn-yes">&#x2705; Yes</button>
+        <button class="btn-qr btn-qr-no" id="btn-no">&#x274C; No</button>
+        <button class="btn-qr btn-qr-proceed" id="btn-proceed">&#x25B6;&#xFE0F; Proceed</button>
+      </div>
+    </div>
     </div>
 
   </section>
@@ -383,6 +446,17 @@
 
       $('btn-kvk').addEventListener('click', function () {
         sendWhenReady('Hi, I would like to start a KYC intake for Cegeka Nederland B.V. \u2014 KvK 30091566');
+      });
+
+      /* ── Quick-reply button handlers ── */
+      $('btn-yes').addEventListener('click', function () {
+        sendWhenReady('Yes');
+      });
+      $('btn-no').addEventListener('click', function () {
+        sendWhenReady('No');
+      });
+      $('btn-proceed').addEventListener('click', function () {
+        sendWhenReady('Proceed');
       });
 
       /* ── Error display ── */
